@@ -25,7 +25,8 @@ jobs:
         env:
           PCLOUD_USER: ${{ secrets.PCLOUD_USER }}
           PCLOUD_PASSWORD: ${{ secrets.PCLOUD_PASSWORD }}
-        run: python check_manuals.py
+          PYTHONUNBUFFERED: "1"
+        run: python -u check_manuals.py
 
       - name: Commit state changes
         run: |
