@@ -1,4 +1,2 @@
-Code
-
 requests
 beautifulsoup4
