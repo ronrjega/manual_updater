@@ -108,3 +108,26 @@ def main():
 
         print(f"[{did}] Neue Version gefunden: {manual_url}")
         pdf_resp = requests.get(manual_url, timeout=60, headers=HEADERS)
+        pdf_resp.raise_for_status()
+
+        filename = manual_url.rsplit("/", 1)[-1]
+        new_path = f"{PCLOUD_FOLDER}/{filename}"
+        old_path = prev.get("pcloud_path")
+
+        if old_path and old_path != new_path:
+            print(f"[{did}] Lösche alte Datei: {old_path}")
+            delete_from_pcloud(old_path)
+
+        print(f"[{did}] Lade hoch: {new_path}")
+        upload_to_pcloud(new_path, pdf_resp.content)
+
+        state[did] = {"manual_url": manual_url, "pcloud_path": new_path}
+        changed = True
+
+    save_state(state)
+    if changed:
+        print("STATE_CHANGED")
+
+
+if __name__ == "__main__":
+    main()
